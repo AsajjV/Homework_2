@@ -1,0 +1,57 @@
+Sub WSEasyStocks()
+
+'Loop through all the sheets
+For Each ws In Worksheets
+
+Dim LastRow As Long
+LastRow = ws.Cells(Rows.Count, "A").End(xlUp).Row
+
+'set an initial variable for holding the ticker name
+Dim ticker As String
+
+'set an inital variable for holding the total volume per ticker name
+Dim Total_Volume As Double
+Total_Volume = 0
+
+'Add column names to Summary table
+ws.Range("i1").Value = "TICKER"
+ws.Range("j1").Value = "Total Volume"
+
+'keep track of the location for each ticker name in the summary table
+Dim Summary_Table_Row As Integer
+Summary_Table_Row = 2
+
+    'Loop through all of the ticker names with their volume
+    For i = 2 To LastRow
+        'check if we are still within the same ticker name, if it is not...
+        If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+            'set the ticker name
+            ticker = ws.Cells(i, 1).Value
+        
+            'Add to the ticker_Volume total
+            Total_Volume = Total_Volume + ws.Cells(i, 7).Value
+        
+            'Print the ticker name in the Summary Table
+            ws.Range("I" & Summary_Table_Row).Value = ticker
+        
+            'Print the ticker volume to the Summary Table
+            ws.Range("J" & Summary_Table_Row).Value = Total_Volume
+        
+            'add one to the summary table row
+            Summary_Table_Row = Summary_Table_Row + 1
+        
+            'Reset the ticker_Volume to zero
+            Total_Volume = 0
+        
+            'If the cell immediately following a row is the same ticker
+            
+            Else
+            'add to the ticker_Volume
+                Total_Volume = Total_Volume + ws.Cells(i, 7).Value
+        End If
+    
+    Next i
+
+Next
+
+End Sub
